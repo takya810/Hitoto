@@ -25,7 +25,7 @@ def load_toto_data():
     toto_data['train_data'],toto_data['train_label'] = load_data(path=key_file['train_data_file_path'], name=key_file['team_list'])
     # 正規化
     toto_data['train_data'] = toto_data['train_data'].astype(np.float32)
-    toto_data['train_data'] /= 255.0
+    toto_data['train_data'] /= 100.0
         
     #toto_data['test_data'],toto_data['test_label'] = load_data(test_file_path,file_name)
     
@@ -67,8 +67,8 @@ def _change_one_hot_label(X):
     T = np.zeros((X.size, 3))
     for idx, row in enumerate(T):
         #0,1,2以外の場合0を設定する
-        if(idx > 2 or idx < 0): 
-            row[X[0]] = 1
+        if(X[idx] > 2 or X[idx] < 0): 
+            row[0] = 1
         else:
             row[X[idx]] = 1
     return T
@@ -88,5 +88,9 @@ def load_predict_data(file_name):
         
     # データの連結
     data = np.r_[data,tmp_data]
-    
+
+    #正規化
+    data = data.astype(np.float32)
+    data /= 100.0
+
     return data

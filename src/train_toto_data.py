@@ -19,9 +19,6 @@ from two_layer_net import TwoLayerNet
 #(x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 (x_train, t_train) = load_toto_data()
 
-#print(x_train)
-#print(t_train)
-
 network = TwoLayerNet(input_size=3, hidden_size=2, output_size=3)
 
 iters_num = 1000
@@ -39,6 +36,7 @@ train_acc = network.accuracy(x_train, t_train)
 print(str(-1) + ":" + str(train_acc))
 
 for i in range(iters_num):
+    print(i)
     batch_mask = np.random.choice(train_size, batch_size)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
