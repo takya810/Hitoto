@@ -35,25 +35,30 @@ def load_toto_data():
     return (toto_data['train_data'],toto_data['train_label'])
     #return (toto_data['train_data'],toto_data['train_label']),(toto_data['test_data'],toto_data['test_label'])
 
+
 def load_data(path, name):
-    file_name = path + name
     
+    # チーム一覧ファイルの読込
+    file_name = path + name
     file = open(file_name)
     team_list = file.read().split('\n')
     
+    # 入力データ変数の宣言
     data = np.zeros((0,3))
+    # ラベルデータ変数の宣言
     label = np.zeros((0,1),dtype=np.uint8)
     
+    # チーム毎の投票率データを読み込む
     for line in team_list:
 
         if(line != ""):
             file_name = path + line + ".dat"
             tmp_data = np.genfromtxt(file_name, delimiter=" ", usecols=(2,3,4))
             tmp_label = np.genfromtxt(file_name, delimiter=" ", usecols=(1), dtype=np.uint8)
-
+            
             if(tmp_data.shape == (3,)):
                 tmp_data = np.reshape(tmp_data,(1,3))
-            tmp_label = np.reshape(tmp_label,(-1,1))    
+            tmp_label = np.reshape(tmp_label,(-1,1))
             
             # データの連結
             data = np.r_[data,tmp_data]
@@ -61,19 +66,20 @@ def load_data(path, name):
     
     return data,label
 
-
+# one-hot表現に変換
 def _change_one_hot_label(X):
     
     T = np.zeros((X.size, 3))
     for idx, row in enumerate(T):
         #0,1,2以外の場合0を設定する
         if(X[idx] > 2 or X[idx] < 0): 
+            print("error:" + str(X[idx]))
             row[0] = 1
         else:
             row[X[idx]] = 1
     return T
 
-
+# 予測対象データの読み込
 def load_predict_data(file_name):
     
     file = open(file_name)
